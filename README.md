@@ -8,6 +8,18 @@ This project implements a two-stage pipeline:
 1. Text Extraction: Uses computer vision techniques to preprocess images and extract text
 2. Entity Value Prediction: Employs BERT-based models to predict entity values from extracted text
 
+## Project Structure
+
+```
+Image2Entity/
+├── image_extraction/
+│   └── extract.ipynb          # OCR pipeline for text extraction
+├── model_train/
+│   └── model.ipynb            # BERT-based model training
+├── requirements.txt           # Python dependencies
+└── README.md                 # Project documentation
+```
+
 ## Features
 
 - Image preprocessing with OpenCV
@@ -17,20 +29,6 @@ This project implements a two-stage pipeline:
 - Support for batch processing of images
 - Checkpoint system for training recovery
 
-## Requirements
-
-### Dependencies
-```
-python>=3.7
-torch>=1.8.0
-transformers>=4.5.0
-opencv-python>=4.5.0
-easyocr>=1.4.0
-pandas>=1.2.0
-numpy>=1.19.0
-scikit-learn>=0.24.0
-pillow>=8.0.0
-tqdm>=4.60.0
 ```
 
 ### Hardware Requirements
@@ -41,8 +39,8 @@ tqdm>=4.60.0
 
 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/visual-information-extractor.git
-cd visual-information-extractor
+git clone https://github.com/Achyut655/Image2Entity.git
+cd Image2Entity
 ```
 
 2. Install dependencies
@@ -54,32 +52,35 @@ pip install -r requirements.txt
 
 ### 1. Text Extraction
 ```python
-from src.text_extraction.ocr_pipeline import process_images_from_csv
+# Run the Jupyter notebook for text extraction
+# Open image_extraction/extract.ipynb in Jupyter or Google Colab
+# The notebook contains the complete OCR pipeline for processing images
 
-# Process images and extract text
-process_images_from_csv(
-    csv_file='path/to/input.csv',
-    output_file='path/to/output.csv'
-)
+# Example usage from the notebook:
+csv_file = 'path/to/your/input.csv'  # Replace with your CSV file path
+output_file = 'output_with_extracted_text.csv'  # Output file
+process_images_from_csv(csv_file, output_file)
 ```
 
 ### 2. Training the Model
 ```python
-# Train the BERT classifier
-python src/model/training.py \
-    --input_file processed_data.csv \
-    --epochs 25 \
-    --batch_size 16
+# Run the Jupyter notebook for model training
+# Open model_train/model.ipynb in Jupyter or Google Colab
+# The notebook contains the complete BERT-based training pipeline
+
+# The model will be saved as:
+# - entity_value_predictor_model/
+# - entity_value_predictor_tokenizer/
 ```
 
 ### 3. Making Predictions
 ```python
-from src.model.bert_classifier import predict_entity_value
-
-# Predict entity value for extracted text
+# The prediction function is included in the model training notebook
+# Example usage:
 text = "Product weight: 500g"
 entity_name = "item_weight"
 predicted_value = predict_entity_value(text, entity_name)
+print(f"Predicted entity value: {predicted_value}")
 ```
 
 ## Model Performance
@@ -89,6 +90,20 @@ predicted_value = predict_entity_value(text, entity_name)
 - Accuracy improvement: 15%
 - Training time: ~8 hours on V100 GPU
 - Inference time: ~0.5 seconds per image
+
+## Data Format
+
+The notebooks expect the following data format:
+
+### For Text Extraction (`extract.ipynb`):
+- Input CSV should contain an `image_link` column with URLs to images
+- Output CSV will include an `extracted_text` column with the extracted text
+
+### For Model Training (`model.ipynb`):
+- Input CSV should contain:
+  - `extracted_text`: Text extracted from images
+  - `entity_name`: Name of the entity to predict
+  - `entity_value`: Target value for the entity
 
 ## Future Improvements
 
